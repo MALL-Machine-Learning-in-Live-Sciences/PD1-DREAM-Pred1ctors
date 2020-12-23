@@ -8,6 +8,8 @@ Here we describe how to build and locally run example models provided for Challe
 
 ## Docker installation
 
+More info (in spanish) on the following [link](https://cafernandezlo.github.io/es_fic_muei_ics/ics.html)
+
 On linux, create a new group in your machine in order to run docker without root privileges:
 
 ```bash
