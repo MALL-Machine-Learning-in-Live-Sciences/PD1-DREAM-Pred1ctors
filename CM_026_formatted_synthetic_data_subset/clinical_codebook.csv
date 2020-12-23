@@ -1,0 +1,15 @@
+ID,Label,Class,Levels
+patientID,unique deidentified subject ID,character,
+SEX,Sex,factor,F,M
+AAGE,Derived Age at Consent,numeric,
+CRFHIST,CRFHIST: CRF HISTOLOGY,factor,NON-SQUAMOUS,SQUAMOUS
+TOBACUSE,Tobacco Use,factor,CURRENT,FORMER,NEVER,UNKNOWN
+ECOGPS,ECOGPS: PERFORMANCE STATUS (ECOG),numeric,
+PDL1,PDL1 IHC Percent,numeric,
+TMB,Tumor Mutation Burden,numeric,
+TCR_Shannon,TCR Shannon's Entropy,numeric,
+TCR_Shannon,TCR Richness,integer,
+TCR_Shannon,TCR Evenness,numeric,
+BCR_Shannon,BCR Shannon's Entropy,numeric,
+BCR_Shannon,BCR Richness,integer,
+BCR_Shannon,BCR Evenness,numeric,
