@@ -18,7 +18,7 @@ model1 = BMsel(mel_data,6:20 , c("PFS","PFS.Event_num"), c("Cohort_num"),tt="Dru
                #method = c('alassoL', 'alassoR', 'alassoU', 'enet', 'gboost', 'glasso', 'lasso', 'lasso-1se', 'lasso-AIC', 'lasso-BIC',
                #           'lasso-HQIC', 'lasso-pct', 'lasso-pcvl','lasso-RIC', 'modCov', 'PCAlasso', 'PLSlasso', 'ridge', 'ridgelasso', 'stabSel', 'uniFDR'),
                method = c('alassoR', 'alassoU', 'enet',  'lasso', 'lasso-1se', 'lasso-AIC', 'lasso-BIC',
-                          'lasso-HQIC', 'lasso-pct', 'lasso-pcvl','lasso-RIC', 'modCov', 'PCAlasso', 'PLSlasso', 'ridge', 'ridgelasso',  'uniFDR'),
+                          'lasso-HQIC', 'lasso-pct', 'lasso-pcvl','lasso-RIC', 'PCAlasso', 'PLSlasso', 'ridge', 'ridgelasso',  'uniFDR'),
               #method = c('lasso',  'uniFDR'),
                folds = 10, uni.fdr = 0.05, uni.test = 1, ss.rando = F, ss.nsub = 100,
                ss.fsub = 0.5, ss.fwer = 1, ss.thr = 0.6, dfmax = 70,
@@ -28,7 +28,7 @@ model2 = BMsel(mel_data,6:55 , c("PFS","PFS.Event_num"), c("Cohort_num"),tt="Dru
                #method = c('alassoL', 'alassoR', 'alassoU', 'enet', 'gboost', 'glasso', 'lasso', 'lasso-1se', 'lasso-AIC', 'lasso-BIC',
                #           'lasso-HQIC', 'lasso-pct', 'lasso-pcvl','lasso-RIC', 'modCov', 'PCAlasso', 'PLSlasso', 'ridge', 'ridgelasso', 'stabSel', 'uniFDR'),
                method = c('alassoR', 'alassoU', 'enet',  'lasso', 'lasso-1se', 'lasso-AIC', 'lasso-BIC',
-                          'lasso-HQIC', 'lasso-pct', 'lasso-pcvl','lasso-RIC', 'modCov', 'PCAlasso', 'PLSlasso', 'ridge', 'ridgelasso',  'uniFDR'),
+                          'lasso-HQIC', 'lasso-pct', 'lasso-pcvl','lasso-RIC', 'PCAlasso', 'PLSlasso', 'ridge', 'ridgelasso',  'uniFDR'),
                #method = c('lasso',  'uniFDR'),
                folds = 10, uni.fdr = 0.05, uni.test = 1, ss.rando = F, ss.nsub = 100,
                ss.fsub = 0.5, ss.fwer = 1, ss.thr = 0.6, dfmax = 70,
@@ -37,11 +37,11 @@ model2 = BMsel(mel_data,6:55 , c("PFS","PFS.Event_num"), c("Cohort_num"),tt="Dru
 save(model1,model2,file="models_melanoma.RData")
 
 
-pred1 = predRes(model1, method=c('alassoR', 'alassoU', 'enet',  'lasso', 'lasso-1se', 'lasso-AIC', 'lasso-BIC', 'lasso-HQIC', 'lasso-pct', 'lasso-pcvl','lasso-RIC', 'modCov', 'PCAlasso', 'PLSlasso',  'ridgelasso',  'uniFDR'), 
+pred1 = predRes(model1, method=c('alassoR', 'alassoU', 'enet',  'lasso', 'lasso-1se', 'lasso-AIC', 'lasso-BIC', 'lasso-HQIC', 'lasso-pct', 'lasso-pcvl','lasso-RIC', 'PCAlasso', 'PLSlasso',  'ridgelasso',  'uniFDR'), 
                 mel_data,  int.cv=T, int.cv.nfold = 5, time=seq(100,1500,100),
                 trace = TRUE, ncores = 5)
 
-pred1_50 = predRes(model2, method=c('alassoR', 'alassoU', 'enet',  'lasso', 'lasso-1se', 'lasso-AIC', 'lasso-BIC', 'lasso-HQIC', 'lasso-pct', 'lasso-pcvl','lasso-RIC', 'modCov', 'PCAlasso', 'PLSlasso',  'ridgelasso',  'uniFDR'), 
+pred1_50 = predRes(model2, method=c('alassoR', 'alassoU', 'enet',  'lasso', 'lasso-1se', 'lasso-AIC', 'lasso-BIC', 'lasso-HQIC', 'lasso-pct', 'lasso-pcvl','lasso-RIC', 'PCAlasso', 'PLSlasso',  'ridgelasso',  'uniFDR'), 
                 mel_data,  int.cv=T, int.cv.nfold = 5, time=seq(100,1500,100),
                 trace = TRUE, ncores = 20)
 
