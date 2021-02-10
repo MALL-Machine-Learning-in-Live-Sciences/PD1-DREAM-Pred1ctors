@@ -34,24 +34,27 @@ standarize = function(df, log2 = T, scale = T){
 }
 
 
-supressMessages(library(sva))
-supressMessages(library(PCAtools))
+library(sva)
+library(PCAtools)
+library(biospear)
+# source('predRes_modified.r')
 
 # get command line args: args[1] input rna-seq gene level count data, args[2] output file: two column(patient id, inflammation score) .csv file
-args        <- commandArgs(trailingOnly=TRUE)
-counts      <- fread(args[1],data.table = F); rownames(counts) <- counts[,1]; counts <- counts[,-1]; print("done reading in counts")
+# args        	 <- commandArgs(trailingOnly=TRUE)
+# counts.test      <- fread(args[1],data.table = F); rownames(counts) <- counts[,1]; counts <- counts[,-1]; print("done reading in counts")
 
 
-# Data directory of synthetic data
+# OJO!!! Delete these lines to run with docker!
+# ======================================================================================
+# Load validation data from local
+source('~/git/PD1-DREAM-Pred1ctors/ours/predRes_modified.r')
+counts.test = read.csv('~/git/PD1-DREAM-Pred1ctors/CM_026_formatted_synthetic_data_subset/GRCh37ERCC_refseq105_genes_count.csv', header = T, row.names = 1)
+model = readRDS('~/git/PD1-DREAM-Pred1ctors/models/pfs_train_objects.rds')
+# ======================================================================================
+
+# Load our models
 # ===========================================
-dirData = '~/git/PD1-DREAM-Pred1ctors/CM_026_formatted_synthetic_data_subset/'
-setwd(dirData)
-
-
-# Load train objects
-# ===========================================
-model = readRDS('../../../projects/Anti-PD1/data/metacohort/pfs_train_objects.rds')
-
+# model = readRDS('/models/pfs_train_objects.rds')
 # Clinical
 clin.train = model$genes[,570:573]
 # Expression
@@ -63,7 +66,6 @@ genes = names(counts.train)
 # Read data test
 # ===========================================
 # Load RefSeq105 genes raw counts
-counts.test = read.csv('GRCh37ERCC_refseq105_genes_count.csv', header = T, row.names = 1)
 # Transposed
 counts.test = as.data.frame(t(counts.test))
 # Match with our genes
@@ -94,6 +96,8 @@ counts.test = combat[match(rownames(counts.test), rownames(combat)), ]
 # Prediction of treatment variable
 # ===========================================
 # ???????
+# drug = predict()
+drug = sample(c(0), size = nrow(counts.test), replace = T)
 
 
 # PCA
@@ -108,15 +112,24 @@ pca <- list(sdev = pca$sdev,
 class(pca) <- 'prcomp'
 # Make predict
 test.pca = predict(pca, newdata = counts.test)
+test.pca = as.data.frame(test.pca)
 
 
 # Add clinical data
 # ===========================================
+test.pca$Drug = drug
+test.pca$Cohort = 3
 
+
+# Predict biospear model
+# ===========================================
+# ??????????????????
+biospear = readRDS("~/git/PD1-DREAM-Pred1ctors/models/pfs_biospear_model_melanoma_Treatment.rds") #cambiar ruta para correr el docker!!!
+res = predBiospear(res = biospear, method = 'PCAlasso', newdata = test.pca)
 
 
 # write out inflammation signature to prediciton file
-write.csv(inflam_sig, file = args[2], quote = F, row.names = F); print("done writing out signature")
+# write.csv(res, file = args[2], quote = F, row.names = F); print("done writing out signature")
 
-rm(tmm,counts)
+
 
