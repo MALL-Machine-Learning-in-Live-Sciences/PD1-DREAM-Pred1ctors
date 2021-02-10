@@ -37,19 +37,20 @@ standarize = function(df, log2 = T, scale = T){
 library(sva)
 library(PCAtools)
 library(biospear)
-# source('predRes_modified.r')
+source('predRes_modified.r')
 
 # get command line args: args[1] input rna-seq gene level count data, args[2] output file: two column(patient id, inflammation score) .csv file
-# args        	 <- commandArgs(trailingOnly=TRUE)
-# counts.test      <- fread(args[1],data.table = F); rownames(counts) <- counts[,1]; counts <- counts[,-1]; print("done reading in counts")
+args        	 <- commandArgs(trailingOnly=TRUE)
+counts.test      <- fread(args[1],data.table = F); rownames(counts) <- counts[,1]; counts <- counts[,-1]; print("done reading in counts")
 
 
 # OJO!!! Delete these lines to run with docker!
 # ======================================================================================
 # Load validation data from local
-source('~/git/PD1-DREAM-Pred1ctors/ours/predRes_modified.r')
-counts.test = read.csv('~/git/PD1-DREAM-Pred1ctors/CM_026_formatted_synthetic_data_subset/GRCh37ERCC_refseq105_genes_count.csv', header = T, row.names = 1)
-model = readRDS('~/git/PD1-DREAM-Pred1ctors/models/pfs_train_objects.rds')
+# counts.test = read.csv('~/git/PD1-DREAM-Pred1ctors/CM_026_formatted_synthetic_data_subset/GRCh37ERCC_refseq105_genes_count.csv', header = T, row.names = 1)
+model = readRDS('models/pfs_train_objects.rds')
+
+
 # ======================================================================================
 
 # Load our models
@@ -124,12 +125,12 @@ test.pca$Cohort = 3
 # Predict biospear model
 # ===========================================
 # ??????????????????
-biospear = readRDS("~/git/PD1-DREAM-Pred1ctors/models/pfs_biospear_model_melanoma_Treatment.rds") #cambiar ruta para correr el docker!!!
+biospear = readRDS("models/pfs_biospear_model_melanoma_Treatment.rds") #cambiar ruta para correr el docker!!!
 res = predBiospear(res = biospear, method = 'PCAlasso', newdata = test.pca)
 
 
 # write out inflammation signature to prediciton file
-# write.csv(res, file = args[2], quote = F, row.names = F); print("done writing out signature")
+write.csv(res[[1]], file = args[2], quote = F, row.names = F); print("done writing out signature")
 
 
 
