@@ -33,7 +33,7 @@ standarize = function(df, log2 = T, scale = T){
   return(res)
 }
 
-
+library(data.table)
 library(sva)
 library(PCAtools)
 library(biospear)
@@ -41,7 +41,7 @@ source('predRes_modified.r')
 
 # get command line args: args[1] input rna-seq gene level count data, args[2] output file: two column(patient id, inflammation score) .csv file
 args        	 <- commandArgs(trailingOnly=TRUE)
-counts.test      <- fread(args[1],data.table = F); rownames(counts) <- counts[,1]; counts <- counts[,-1]; print("done reading in counts")
+counts.test      <- fread(args[1],data.table = F); rownames(counts.test) <- counts.test[,1]; counts.test <- counts.test[,-1]; print("done reading in counts")
 
 
 # OJO!!! Delete these lines to run with docker!
@@ -128,9 +128,10 @@ test.pca$Cohort = 3
 biospear = readRDS("models/pfs_biospear_model_melanoma_Treatment.rds") #cambiar ruta para correr el docker!!!
 res = predBiospear(res = biospear, method = 'PCAlasso', newdata = test.pca)
 
+predictions = cbind.data.frame(patientID = rownames(res[[1]]), prediction = res[[1]][,1])
 
 # write out inflammation signature to prediciton file
-write.csv(res[[1]], file = args[2], quote = F, row.names = F); print("done writing out signature")
+write.csv(predictions, file = args[2], quote = F, row.names = F); print("done writing out signature")
 
 
 

@@ -83,3 +83,15 @@ systemctl status docker
 ## Submit this model to the Anti-PD1 DREAM Challenge
 
 This model meets the requirements for models to be submitted to Question 1 of the Anti-PD1 DREAM Challenge. Please see [this page](https://www.synapse.org/#!Synapse:syn18404605/wiki/607231) for instructions on how to submit this model.
+
+## Submit our model
+
+Run the dockerized model
+
+    ```bash
+    docker run \
+        -v $(pwd)/CM_026_formatted_synthetic_data_subset/:/data:ro \
+        -v $(pwd)/output:/output:rw \
+        ours-antipd1-q1-model:v1
+    ```
+
