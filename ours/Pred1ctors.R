@@ -37,6 +37,7 @@ library(data.table)
 library(sva)
 library(PCAtools)
 library(biospear)
+library(impute)
 source('predRes_modified.r')
 
 # get command line args: args[1] input rna-seq gene level count data, args[2] output file: two column(patient id, inflammation score) .csv file
@@ -73,6 +74,9 @@ counts.test = as.data.frame(t(counts.test))
 counts.test = counts.test[, match(genes, names(counts.test))]
 # Apply log2 and scaling
 counts.test = standarize(counts.test, log2 = T, scale = T)
+# Impute NA´s
+res = impute.knn(t(counts.test))
+counts.test = as.data.frame(t(res$data))
 
 
 # Combat
