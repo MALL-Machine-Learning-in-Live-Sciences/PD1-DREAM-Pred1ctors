@@ -112,7 +112,7 @@ dataTrans <- function(data, x, y, z, tt, std.x, std.i, std.tt, inter, trace = TR
 }
 
 
-predBiospear = function(res, method, newdata){
+predBiospear = function(res, method, newdata, randomPFS){
   
   # Arguments
   #   model: resBMsel object
@@ -121,9 +121,11 @@ predBiospear = function(res, method, newdata){
 
   require(survival)
   
-  newdata$PFS = sample(c(1:1825), size = nrow(newdata), replace = T)
-  newdata$PFS.Event = sample(c(0,1), size = nrow(newdata), replace = T)
-  
+  if (randomPFS == T){
+    newdata$PFS = sample(c(1:1825), size = nrow(newdata), replace = T)
+    newdata$PFS.Event = sample(c(0,1), size = nrow(newdata), replace = T)
+  }
+
   tt = attributes(res)$inames[which(attributes(res)$tnames ==  "tt")]
   x = attributes(res)$inames[which(attributes(res)$tnames ==  "x")]
   z = attributes(res)$inames[which(attributes(res)$tnames ==  "z")]
@@ -152,13 +154,7 @@ predBiospear = function(res, method, newdata){
   if (nrow(Res) > 0) 
     lp.new <- as.matrix(newdata[, rownames(Res)]) %*% 
     as.matrix(Res)
-  if (attributes(res)$inter == TRUE) {
-    lpint.new <- matrix(0, nrow = nrow(newdata), ncol = ncol(Res))
-    if (nrow(Res.i) > 0 & sum(Res.i) != 0) 
-      lpint.new <- as.matrix(newdata[, gsub(paste0(":", attributes(res)$inames[1]), "", rownames(Res.i))]) %*% as.matrix(Res.i)
-  }
   
-  return(list(lp.new, lpint.new))
-  
+  return(lp.new)
 }
 
