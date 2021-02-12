@@ -94,13 +94,6 @@ combat = as.data.frame(t(combat))
 counts.test = combat[match(rownames(counts.test), rownames(combat)), ]
 
 
-# Prediction of treatment variable
-# ===========================================
-# ???????
-# drug = predict()
-drug = sample(c(0), size = nrow(counts.test), replace = T)
-
-
 # PCA
 # ===========================================
 # Load our PCA model
@@ -118,17 +111,16 @@ test.pca = as.data.frame(test.pca)
 
 # Add clinical data
 # ===========================================
-test.pca$Drug = drug
+test.pca$Drug = 0
 test.pca$Cohort = 3
 
 
 # Predict biospear model
 # ===========================================
-# ??????????????????
 biospear = readRDS("models/pfs_biospear_model_melanoma_Treatment.rds") #cambiar ruta para correr el docker!!!
-res = predBiospear(res = biospear, method = 'PCAlasso', newdata = test.pca)
+res = predBiospear(res = biospear, method = 'alassoR', newdata = test.pca, randomPFS = T)
 
-predictions = cbind.data.frame(patientID = rownames(res[[1]]), prediction = res[[1]][,1])
+predictions = cbind.data.frame(patientID = rownames(res), prediction = res[,1])
 
 # write out inflammation signature to prediciton file
 write.csv(predictions, file = args[2], quote = F, row.names = F); print("done writing out signature")
