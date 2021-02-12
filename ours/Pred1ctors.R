@@ -75,6 +75,8 @@ counts.test = counts.test[, match(genes, names(counts.test))]
 # Apply log2 and scaling
 counts.test = standarize(counts.test, log2 = T, scale = T)
 # Impute NA´s
+print('impute NAs')
+
 res = impute.knn(t(counts.test))
 counts.test = as.data.frame(t(res$data))
 
@@ -95,6 +97,7 @@ combat = ComBat(dat = t(counts), batch = meta$subset, mod = m, ref.batch = 'trai
 # Tranposed combat matrix
 combat = as.data.frame(t(combat))
 # Retrieve test data counts from combat
+print('combat')
 counts.test = combat[match(rownames(counts.test), rownames(combat)), ]
 
 
@@ -112,6 +115,7 @@ class(pca) <- 'prcomp'
 test.pca = predict(pca, newdata = counts.test)
 test.pca = as.data.frame(test.pca)
 
+print('normalizing by PCA')
 
 # Add clinical data
 # ===========================================
@@ -122,6 +126,8 @@ test.pca$Cohort = 3
 # Predict biospear model
 # ===========================================
 biospear = readRDS("models/pfs_biospear_model_melanoma_Treatment.rds") #cambiar ruta para correr el docker!!!
+print('biospear')
+
 res = predBiospear(res = biospear, method = 'alassoR', newdata = test.pca, randomPFS = T)
 
 predictions = cbind.data.frame(patientID = rownames(res), prediction = res[,1])

@@ -30,6 +30,8 @@ RUN install2.r \
     data.table \
 && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 
+RUN R -e "BiocManager::install('impute')"
+
 COPY Pred1ctors.R /Pred1ctors.R
 COPY models /models
 COPY predRes_modified.r /predRes_modified.r
