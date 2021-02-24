@@ -120,7 +120,7 @@ print('normalizing by PCA')
 # Add clinical data
 # ===========================================
 test.pca$Drug = 0
-test.pca$Cohort = 3
+test.pca$Cohort = 1.5
 
 
 # Predict biospear model
